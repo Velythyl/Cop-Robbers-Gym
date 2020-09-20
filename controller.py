@@ -41,7 +41,7 @@ class NaiveController(Controller):
 class NaiveRobber(NaiveController):
     def act(self, obs):
         candidates = self.get_candidates(self.env.cops_pos)
-        if -1 not in obs:
+        if obs is None or -1 not in obs:
             # find the nodes the furthest away from all cops
             # then, find the best node among those (the column whose minimum is maximally away from the cops)
             best_candidate = np.argmax(np.min(candidates, axis=0))

@@ -1,6 +1,23 @@
 # Cop-Robbers-Gym
 An openai gym that allows agent to catch bad guys and bad guys to escape from the long arm of the law.
 
+# What is provided in this gym?
+
+## Controllers:
+
+Basic controllers are useful when one only wants to train one of the sides of this problem. A naive controller for both 
+the robber and the cops is provided. Notice that even though its decision rules are fairly simple, it still offers adequate
+performance. Here are a few examples on the Petersen graph (which is of cop number 3):
+
+With one cop:
+![gif of robber vs one cop](./gifs/1.gif)
+
+With two cops:
+![gif of robber vs two cops](./gifs/2.gif)
+
+With three cops:
+![gif of robber vs three cops](./gifs/3.gif)
+
 # Related work
 
 Cops&robbers has been extensively studied in graph theory. However, we are still very far from any algorithm, even an NP complete one, that could inform us on the "cop-win-ness" of any graph. 

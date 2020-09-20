@@ -9,13 +9,13 @@ Basic controllers are useful when one only wants to train one of the sides of th
 the robber and the cops is provided. Notice that even though its decision rules are fairly simple, it still offers adequate
 performance. Here are a few examples on the Petersen graph (which is of cop number 3):
 
-With one cop:
+With one cop:  
 ![gif of robber vs one cop](./gifs/1.gif)
 
-With two cops:
+With two cops:  
 ![gif of robber vs two cops](./gifs/2.gif)
 
-With three cops:
+With three cops:  
 ![gif of robber vs three cops](./gifs/3.gif)
 
 # Related work

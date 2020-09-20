@@ -12,17 +12,20 @@ REWARD_INVALID = -10
 
 WINDOW_W = WINDOW_H = 600
 
-
+#TODO allow cop to move faster than robber should it be needed (see paper). basically just give it d turns before the
+#turn bool switches
 class CopRobEnv(gym.Env):
     """Custom Environment that follows gym interface"""
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, graph, nb_cops):
+    def __init__(self, graph, nb_cops, robber=None, cop=None):
         super(CopRobEnv, self).__init__()
         # Define action and observation space
         # They must be gym.spaces objects
         self.viewer = None
         self.layout = None
+        self.cop = cop
+        self.robber = robber
         self.reset(graph, nb_cops)
 
     def step(self, action):  # action is nb-cops-sized or 1-sized
@@ -53,7 +56,9 @@ class CopRobEnv(gym.Env):
             self.graph.set_cr(action, self.is_cops_turn)
         else:
             edges = self.graph.get_rep()[old_pos(), action]
-            invalids = np.where(edges != 1)[0]
+            invalids = edges != 1
+            invalids[action == old_pos()] = False
+            invalids = np.where(invalids == True)[0]
             if invalids.shape[0] != 0:
                 action[invalids] = old_pos()[invalids]  # correct action
             self.graph.set_cr(action, self.is_cops_turn)

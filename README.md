@@ -29,4 +29,5 @@ https://www.researchgate.net/publication/317309149_Linguistic_Geometry_Approach_
 
 https://www.google.com/url?sa=t&source=web&rct=j&url=http://webdocs.cs.ualberta.ca/~nathanst/papers/TrailMax.pdf&ved=2ahUKEwi_3c3F_vHrAhVxk-AKHVhlCHsQFjAEegQIBBAB&usg=AOvVaw0MEzu6bxMoV1wrA0PC2zC3&cshid=1600407784378
 
+Simultaneous case: 
 https://era.library.ualberta.ca/items/204f907a-0f02-4ee5-a42a-0c0baa364543

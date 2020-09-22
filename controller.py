@@ -9,6 +9,8 @@ class Controller:
     def act(self, obs):
         raise NotImplemented()
 
+class
+
 class NaiveController(Controller):
     def __init__(self, env):
         super().__init__(env)

@@ -11,15 +11,15 @@ performance. Here are a few examples on the Petersen graph (which is of cop numb
 
 With one cop:
 
-![gif of robber vs one cop](./gifs/1.gif)
+![gif of robber vs one cop](img/1.gif)
 
 With two cops:
  
-![gif of robber vs two cops](./gifs/2.gif)
+![gif of robber vs two cops](img/2.gif)
 
 With three cops:
 
-![gif of robber vs three cops](./gifs/3.gif)
+![gif of robber vs three cops](img/3.gif)
 
 # Related work
 

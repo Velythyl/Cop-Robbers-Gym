@@ -1,10 +1,9 @@
 import time
 
 import gym
+import numpy as np
 import pyglet
 from gym import spaces
-import numpy as np
-from pyglet import gl
 
 REWARD_END_WL = 1000
 REWARD_STEP_WL = 1
@@ -12,21 +11,26 @@ REWARD_INVALID = -10
 
 WINDOW_W = WINDOW_H = 600
 
-#TODO allow cop to move faster than robber should it be needed (see paper). basically just give it d turns before the
-#turn bool switches
+
+# TODO allow cop to move faster than robber should it be needed (see paper). basically just give it d turns before the
+# turn bool switches
 class CopRobEnv(gym.Env):
     """Custom Environment that follows gym interface"""
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, graph, nb_cops, robber=None, cop=None):
+    def __init__(self, graph, nb_cops, auto_robber_class=None, auto_cop_class=None):
         super(CopRobEnv, self).__init__()
         # Define action and observation space
         # They must be gym.spaces objects
         self.viewer = None
         self.layout = None
-        self.cop = cop
-        self.robber = robber
-        self.reset(graph, nb_cops)
+        self.cops = None  # ugly, fixme
+        self.robber = None  # ugly, fixme
+        self.nb_cops = nb_cops
+        self.reset(graph)
+
+        self.cops = None if auto_cop_class is None else auto_cop_class(self)
+        self.robber = None if auto_robber_class is None else auto_robber_class(self)
 
     def step(self, action):  # action is nb-cops-sized or 1-sized
         """
@@ -77,18 +81,28 @@ class CopRobEnv(gym.Env):
 
         observation = self.graph.get_attr()
 
+        if self.is_cops_turn:
+            self.cops_rew += reward
+        else:
+            self.rob_rew += reward
+
+        if not done:
+            if self.is_cops_turn and self.cops is not None:
+                observation, _, done, _ = self.step(self.cops.act(observation))
+            elif not self.is_cops_turn and self.robber is not None:
+                observation, _, done, _ = self.step(self.robber.act(observation))
         return observation, reward, done, {}
 
-    def reset(self, graph=None, nb_cops=None):
-        if graph is None:
-            self.graph = graph
-        else:
+    def reset(self, graph=None):
+        if graph is not None:
             self.graph = graph
             self.viewer = None
             self.layout = None
 
-        if nb_cops is not None:
-            self.nb_cops = nb_cops
+            if self.cops is not None:
+                self.cops.reset(graph)
+            if self.robber is not None:
+                self.robber.reset(graph)
 
         # Initially, cops & robbers can choose position, so space is basically all the graph
         self.cop_action_space = spaces.Box(0, self.graph.get_nb_nodes(), shape=(self.nb_cops,), dtype=int)
@@ -98,6 +112,8 @@ class CopRobEnv(gym.Env):
         self.is_first_turn = True
         self.rob_pos = None
         self.cops_pos = None
+        self.rob_rew = 0
+        self.cops_rew = 0
 
     def render(self, mode='human', human_reading_delay=1):
         from gym.envs.classic_control import rendering
@@ -115,8 +131,6 @@ class CopRobEnv(gym.Env):
 
         G = self.graph.igraph
         fig, ax = plt.subplots()
-        ax.axis('off')
-        fig.tight_layout(pad=0)
 
         colors = np.array(["white"] * len(G.nodes))
         if self.cops_pos is not None:
@@ -128,9 +142,12 @@ class CopRobEnv(gym.Env):
         nx.draw_networkx_labels(G, self.layout)
         nx.draw_networkx_edges(G, self.layout, edgelist=[edge for edge in G.edges()], arrows=False)
 
+        ax.set_title("Robber's reward:" + str(self.rob_rew) + "; Cops' Reward:" + str(self.cops_rew))
+
         fig.canvas.draw()
         image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
         image_from_plot = image_from_plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+        plt.close(fig)
 
         self.viewer.imshow(image_from_plot)
         time.sleep(1)

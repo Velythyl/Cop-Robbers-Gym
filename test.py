@@ -6,9 +6,9 @@ from controller import NaiveRobber, NaiveCop
 from cop_and_robbers_env import CopRobEnv
 from graph_utils import Graph
 
-networkx_graph = nx.petersen_graph()
+networkx_graph = nx.frucht_graph()
 graph = Graph(networkx_graph)
-env = CopRobEnv(graph, 3)
+env = CopRobEnv(graph, 2, auto_robber_class=NaiveRobber)
 
 robber = NaiveRobber(env)
 cop = NaiveCop(env)
@@ -21,8 +21,8 @@ while not done:
     if done:
         break
     env.render()
-    obs, _, done, _ = env.step(robber.act(obs))
-    env.render()
+    #obs, _, done, _ = env.step(robber.act(obs))
+    #env.render()
 exit()
 
 env.render()

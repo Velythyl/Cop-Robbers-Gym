@@ -56,4 +56,6 @@ https://era.library.ualberta.ca/items/204f907a-0f02-4ee5-a42a-0c0baa364543
 
 # Notes
 
+For finding cliques: define "coarseness" from 1/1 1/2 1/3 etc. Take coarseness times NB nodes. For each level of abstraction, repeatedly find all triangles, collapse them until we're at coarseness, and then remove leaves.
+
 https://www.aaai.org/Papers/Workshops/2006/WS-06-11/WS06-11-012.pdf is real time, and agents cant move while they think. Doesnt really matter here, as our env if just more similar to https://era.library.ualberta.ca/items/204f907a-0f02-4ee5-a42a-0c0baa364543
